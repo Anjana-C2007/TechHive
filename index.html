@@ -1,10 +1,19 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html>
 <head>
-  <title>TechHive</title>
+  <title>TechHive - Login</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <h1>Welcome to TechHive</h1>
-  <p>A community space for our department's students.</p>
+  <form id="loginForm">
+    <label for="regno">Registration Number:</label>
+    <input type="text" id="regno" name="regno" required>
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required>
+
+    <button type="submit">Login</button>
+  </form>
 </body>
 </html>

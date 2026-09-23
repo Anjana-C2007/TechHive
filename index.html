@@ -1,10 +1,35 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html>
 <head>
-  <title>TechHive</title>
+  <title>TechHive - Login</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <h1>Welcome to TechHive</h1>
-  <p>A community space for our department's students.</p>
+  <form id="loginForm">
+    <label for="regno">Registration Number:</label>
+    <input type="text" id="regno" name="regno" required>
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required>
+
+    <button type="submit">Login</button>
+  </form>
+  <script>
+  document.getElementById('loginForm').addEventListener('submit', async function(e) {
+    e.preventDefault(); // stops the page from refreshing
+    const regno = document.getElementById('regno').value;
+    const password = document.getElementById('password').value;
+
+    const response = await fetch('/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ regno, password })
+    });
+
+    const data = await response.json();
+    alert(data.message);
+  });
+</script>
 </body>
 </html>

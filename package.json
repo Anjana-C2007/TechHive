@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/Anjana-C2007/TechHive#readme",
   "dependencies": {
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "socket.io": "^4.8.4"
   }
 }

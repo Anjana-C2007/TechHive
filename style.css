@@ -70,3 +70,14 @@ li a:hover { color: #f59e0b; }
 body > a { color: #fde68a; text-decoration: none; }
 #chatBox { background: #fff; border-radius: 12px; }
 #chatBox p { margin: 6px 0; }
+
+#userBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fff;
+  padding: 10px 16px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+#userBar button { margin-top: 0; padding: 8px 16px; }

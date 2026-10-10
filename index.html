@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+  <!DOCTYPE html>
 <html>
 <head>
   <title>TechHive - Login</title>
@@ -15,25 +15,27 @@
 
     <button type="submit">Login</button>
   </form>
+
   <script>
-  document.getElementById('loginForm').addEventListener('submit', async function(e) {
-    e.preventDefault(); // stops the page from refreshing
-    const regno = document.getElementById('regno').value;
-    const password = document.getElementById('password').value;
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+      e.preventDefault(); // stops the page from refreshing
+      const regno = document.getElementById('regno').value.trim();
+      const password = document.getElementById('password').value;
 
-    const response = await fetch('/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ regno, password })
+      const response = await fetch('/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ regno, password })
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        localStorage.setItem('regno', regno);
+        window.location.href = "dashboard.html";
+      } else {
+        alert(data.message);
+      }
     });
-
-    const data = await response.json();
-    if (data.success) {
-  window.location.href = "dashboard.html";
-} else {
-  alert(data.message);
-}
-  });
-</script>
+  </script>
 </body>
 </html>

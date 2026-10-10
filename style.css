@@ -1,0 +1,72 @@
+* { box-sizing: border-box; }
+
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: linear-gradient(135deg, #1e1b4b, #4338ca);
+  min-height: 100vh;
+  margin: 0;
+  padding: 40px 20px;
+  color: #1f2937;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+body > * { width: 100%; max-width: 600px; }
+
+h1 { color: #fff; text-align: center; margin-bottom: 20px; }
+h2 { color: #fde68a; margin: 24px 0 10px; }
+
+/* Login card */
+#loginForm {
+  background: #fff;
+  padding: 28px;
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+#loginForm label { font-weight: 600; }
+
+input[type="text"], input[type="password"] {
+  padding: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 15px;
+}
+
+button {
+  padding: 12px;
+  background: #f59e0b;
+  color: #1f2937;
+  font-weight: 700;
+  font-size: 15px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 8px;
+}
+button:hover { background: #d97706; }
+
+/* Dashboard lists */
+ul { list-style: none; padding: 0; margin: 0; }
+li {
+  background: #fff;
+  padding: 14px 16px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+li a {
+  color: #4338ca;
+  font-weight: 600;
+  text-decoration: none;
+  display: block;
+}
+li a:hover { color: #f59e0b; }
+
+/* Chat page */
+body > a { color: #fde68a; text-decoration: none; }
+#chatBox { background: #fff; border-radius: 12px; }
+#chatBox p { margin: 6px 0; }

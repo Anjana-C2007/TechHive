@@ -6,6 +6,10 @@
 </head>
 <body>
   <h1>Welcome to TechHive</h1>
+  <div id="userBar">
+  <span>Logged in as <strong id="userName"></strong></span>
+  <button id="logoutBtn">Logout</button>
+</div>
   <h2>Announcements</h2>
   <ul id="announcements">
     <li>Mid-sem exams start next Monday</li>
@@ -18,5 +22,16 @@
 <li><a href="channel.html?name=DBMS">DBMS</a></li>
 <li><a href="channel.html?name=Placement Prep">Placement Prep</a></li>
   </ul>
+  <script>
+  const regno = localStorage.getItem('regno');
+  if (!regno) {
+    window.location.href = "index.html";
+  }
+  document.getElementById('userName').textContent = regno;
+  document.getElementById('logoutBtn').addEventListener('click', function() {
+    localStorage.removeItem('regno');
+    window.location.href = "index.html";
+  });
+</script>
 </body>
 </html>

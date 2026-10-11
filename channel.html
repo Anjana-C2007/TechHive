@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+  <!DOCTYPE html>
 <html>
 <head>
   <title>TechHive - Channel</title>
@@ -22,59 +22,67 @@
 
   <script src="/socket.io/socket.io.js"></script>
   <script>
-    const socket = io();
-    const channel = new URLSearchParams(window.location.search).get('name') || 'General';
     const user = localStorage.getItem('regno');
+    const channel = new URLSearchParams(window.location.search).get('name') || 'General';
 
     if (!user) {
       window.location.href = "index.html";
-    }
+    } else {
+      const socket = io();
+      const messages = document.getElementById('messages');
+      const input = document.getElementById('messageInput');
 
-    document.getElementById('title').textContent = '# ' + channel;
-    socket.emit('join', channel);
+      document.getElementById('title').textContent = '# ' + channel;
 
-    const messages = document.getElementById('messages');
-    const input = document.getElementById('messageInput');
+      // Join on every (re)connect so messages keep arriving after a dropped connection
+      socket.on('connect', () => {
+        socket.emit('join', channel);
+      });
 
-    function addMessage(sender, text) {
-      const div = document.createElement('div');
-      div.className = 'msg' + (sender === user ? ' own' : '');
+      function addMessage(sender, text) {
+        const div = document.createElement('div');
+        div.className = 'msg' + (sender === user ? ' own' : '');
 
-      if (sender !== user) {
-        const name = document.createElement('div');
-        name.className = 'sender';
-        name.textContent = sender;
-        div.appendChild(name);
+        if (sender !== user) {
+          const name = document.createElement('div');
+          name.className = 'sender';
+          name.textContent = sender;
+          div.appendChild(name);
+        }
+
+        const body = document.createElement('div');
+        body.textContent = text;
+        div.appendChild(body);
+
+        const time = document.createElement('div');
+        time.className = 'time';
+        time.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        div.appendChild(time);
+
+        messages.appendChild(div);
+        messages.scrollTop = messages.scrollHeight;
       }
 
-      const body = document.createElement('div');
-      body.textContent = text;
-      div.appendChild(body);
+      socket.on('message', (msg) => addMessage(msg.user, msg.text));
 
-      const time = document.createElement('div');
-      time.className = 'time';
-      time.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-      div.appendChild(time);
+      function send() {
+        const text = input.value.trim();
+        if (text === '') return;
+        socket.emit('message', { channel, user, text });
+        input.value = '';
+        input.focus();
+      }
 
-      messages.appendChild(div);
-      messages.scrollTop = messages.scrollHeight;
+      document.getElementById('sendBtn').addEventListener('click', send);
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') send();
+      });
+
+      document.getElementById('logoutBtn').addEventListener('click', () => {
+        localStorage.removeItem('regno');
+        window.location.href = "index.html";
+      });
     }
-
-    socket.on('message', ({ user: sender, text }) => addMessage(sender, text));
-
-    function send() {
-      if (input.value.trim() === '') return;
-      socket.emit('message', { channel, user, text: input.value });
-      input.value = '';
-    }
-
-    document.getElementById('sendBtn').addEventListener('click', send);
-    input.addEventListener('keydown', (e) => { if (e.key === 'Enter') send(); });
-
-    document.getElementById('logoutBtn').addEventListener('click', function() {
-      localStorage.removeItem('regno');
-      window.location.href = "index.html";
-    });
   </script>
 </body>
 </html>

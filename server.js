@@ -1,16 +1,16 @@
- const express = require('express');
+const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
-
- const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(express.static('.'));
 
+// Demo accounts (test data only)
 const students = [
   { regno: "22CS001", password: "test123" },
   { regno: "22CS002", password: "pass456" }
@@ -27,14 +27,15 @@ app.post('/login', (req, res) => {
 });
 
 io.on('connection', (socket) => {
-  console.log('A user connected');
-
-  socket.on('chatMessage', (msg) => {
-    io.emit('chatMessage', msg); // send to everyone, including sender
+  // Join a channel room
+  socket.on('join', (channel) => {
+    socket.join(channel);
   });
 
-  socket.on('disconnect', () => {
-    console.log('A user disconnected');
+  // Send a message to everyone in that channel (including the sender)
+  socket.on('message', ({ channel, user, text }) => {
+    if (!channel || !text) return;
+    io.to(channel).emit('message', { user, text });
   });
 });
 

@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
   <title>TechHive - Channel</title>
@@ -34,12 +34,12 @@
 
       document.getElementById('title').textContent = '# ' + channel;
 
-      // Join on every (re)connect so messages keep arriving after a dropped connection
+      // Join on every (re)connect; the server replies with saved history
       socket.on('connect', () => {
         socket.emit('join', channel);
       });
 
-      function addMessage(sender, text) {
+      function addMessage(sender, text, time) {
         const div = document.createElement('div');
         div.className = 'msg' + (sender === user ? ' own' : '');
 
@@ -54,16 +54,22 @@
         body.textContent = text;
         div.appendChild(body);
 
-        const time = document.createElement('div');
-        time.className = 'time';
-        time.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        div.appendChild(time);
+        const stamp = document.createElement('div');
+        stamp.className = 'time';
+        stamp.textContent = new Date(time || Date.now()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        div.appendChild(stamp);
 
         messages.appendChild(div);
         messages.scrollTop = messages.scrollHeight;
       }
 
-      socket.on('message', (msg) => addMessage(msg.user, msg.text));
+      // Saved messages: clear first so a reconnect never duplicates them
+      socket.on('history', (list) => {
+        messages.innerHTML = '';
+        list.forEach(m => addMessage(m.user, m.text, m.time));
+      });
+
+      socket.on('message', (m) => addMessage(m.user, m.text, m.time));
 
       function send() {
         const text = input.value.trim();
